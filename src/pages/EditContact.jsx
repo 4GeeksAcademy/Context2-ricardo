@@ -16,10 +16,10 @@ export const EditContact = () => {
   });
 
   useEffect(() => {
-    const loadContact = async () => {
+    const loadContact = async (id) => {
       try {
         const response = await fetch(
-          `https://playground.4geeks.com/contact/agendas/EditContact/contacts/5`
+          `https://playground.4geeks.com/contact/agendas/Ricks/contacts/${id}`
         );
         const data = await response.json();
         setContact(data);
@@ -33,7 +33,7 @@ export const EditContact = () => {
   const handleSubmit = async (updatedContact) => {
     try {
       const response = await fetch(
-        `https://playground.4geeks.com/contact/agendas/EditContact/contacts/5`,
+        `https://playground.4geeks.com/contact/agendas/Ricks/contacts/${updatedContact}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

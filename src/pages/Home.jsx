@@ -10,7 +10,7 @@ export const Home = () => {
   useEffect(() => {
     const loadContacts = async () => {
       try {
-        const resp = await fetch('https://playground.4geeks.com/contact/agendas/EditContact/contacts/5');
+        const resp = await fetch('https://playground.4geeks.com/contact/agendas/Ricks/contacts');
         const data = await resp.json();
         dispatch({
           type: 'load_contacts',
@@ -29,54 +29,41 @@ export const Home = () => {
   // Función para eliminar contacto
   const handleDelete = async (id) => {
     try {
-      const resp = await fetch(`https://playground.4geeks.com/contact/agendas/Ricks/contacts/8`, {
-        method: 'DELETE',
-      });
-      if (resp.ok) {
+        const response = await fetch(`https://playground.4geeks.com/contact/agendas/Ricks/contacts/${id}`, {
+            method: "DELETE",
+        });
+
+        if (!response.ok) throw new Error("Error al eliminar");
+
         dispatch({ type: "delete_contact", payload: id });
-      } else {
-        console.error("Error deleting contact");
-      }
     } catch (error) {
-      console.error("Error deleting contact:", error);
+        console.error("Fallo al eliminar contacto:", error);
     }
-  };
+};
 
- return (
-    <div className="container py-5">
-      <h1 className="text-center mb-4">Contactos</h1>
-
-      {store.contacts.length === 0 && (
-        <p className="text-center">No hay contactos disponibles</p>
-      )}
+  {store.contacts.map((contact) => (
+    <Card
+        key={contact.id}
+        name={contact.name}
+        number={contact.phone}
+        photo={contact.photo}
+        onEdit={() => navigate(`/edit-contact/${contact.id}`)}
+        onDelete={() => handleDelete(contact.id)}
+    />
+))}
 
       <div className="d-flex flex-column gap-3">
         {store.contacts.map((contact) => (
           <Card
-            key={contact._id}
+            key={contact.id} 
             name={contact.name}
             number={contact.phone}
             photo={contact.photo}
-            onEdit={() => navigate(`/edit-contact/${contact._id}`)}
-            onDelete={() => {
-              if (window.confirm("¿Quieres eliminar este contacto?")) {
-                fetch(
-                  `https://playground.4geeks.com/contact/agendas/Ricks/contacts/8`,
-                  {
-                    method: "DELETE",
-                  }
-                )
-                  .then(() => {
-                    dispatch({ type: "delete_contact", payload: contact._id });
-                  })
-                  .catch((error) => {
-                    console.error("Error al eliminar:", error);
-                  });
-              }
-            }}
+            Address={contact.address}
+            Email={contact.email}
+            onEdit={() => navigate(`/edit-contact/${contact.id}`)}
+            onDelete={() => handleDelete(contact.id)}
           />
         ))}
       </div>
-    </div>
-  );
 };

@@ -15,13 +15,16 @@ const storeReducer = (state, action) => {
           c._id === action.payload._id ? action.payload : c
         ),
       };
-    case "delete_contact":
-      return {
+   case "delete_contact":
+    return {
         ...state,
-        contacts: state.contacts.filter((c) => c._id !== action.payload),
-      };
-    default:
-      return state;
+        contacts: state.contacts.filter(contact => contact.id !== action.payload)
+    };
+case "edit_contact":
+	return {
+		...store,
+		contacts: store.contacts.map(c => c.id === action.payload.id ? action.payload : c)
+	};
   }
 };
 
