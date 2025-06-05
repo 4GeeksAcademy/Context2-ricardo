@@ -15,7 +15,7 @@ export const Home = () => {
         dispatch({
           type: 'load_contacts',
           payload: {
-            contacts: data.contacts || [],
+            contacts: data.contacts,
           }
         });
       } catch (error) {
@@ -24,46 +24,43 @@ export const Home = () => {
     };
 
     loadContacts();
-  }, [dispatch]);
+  }, []);// habia un dispatch que sobra, hace que se ejecute de nuevo la funcion.
 
   // Función para eliminar contacto
   const handleDelete = async (id) => {
     try {
-        const response = await fetch(`https://playground.4geeks.com/contact/agendas/Ricks/contacts/${id}`, {
-            method: "DELETE",
-        });
+      const response = await fetch(`https://playground.4geeks.com/contact/agendas/Ricks/contacts/${id}`, {
+        method: "DELETE",
+      });
 
-        if (!response.ok) throw new Error("Error al eliminar");
+      if (!response.ok) throw new Error("Error al eliminar");
 
-        dispatch({ type: "delete_contact", payload: id });
+      dispatch({ type: "delete_contact", payload: id });
     } catch (error) {
-        console.error("Fallo al eliminar contacto:", error);
+      console.error("Fallo al eliminar contacto:", error);
     }
-};
+  };
 
-  {store.contacts.map((contact) => (
-    <Card
-        key={contact.id}
-        name={contact.name}
-        number={contact.phone}
-        photo={contact.photo}
-        onEdit={() => navigate(`/edit-contact/${contact.id}`)}
-        onDelete={() => handleDelete(contact.id)}
-    />
-))}
-
-      <div className="d-flex flex-column gap-3">
-        {store.contacts.map((contact) => (
+  return (
+    <div>
+      {
+        store.contacts.map((contact) => (
           <Card
-            key={contact.id} 
+            key={contact.id}
             name={contact.name}
             number={contact.phone}
             photo={contact.photo}
-            Address={contact.address}
-            Email={contact.email}
-            onEdit={() => navigate(`/edit-contact/${contact.id}`)}
+            onEdit={() => {
+              navigate(`/edit-contact/${contact.id}`)
+              dispatch({ type: "selectedContacts", paylaod: contact})
+            }}
             onDelete={() => handleDelete(contact.id)}
           />
-        ))}
-      </div>
+        ))
+      }
+      
+    </div>
+  )
+
 };
+

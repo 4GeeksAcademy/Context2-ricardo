@@ -1,5 +1,6 @@
 export const initialStore = () => ({
-  contacts: []
+  contacts: [],
+  selectedContacts: {}
 });
 
 const storeReducer = (state, action) => {
@@ -12,19 +13,24 @@ const storeReducer = (state, action) => {
       return {
         ...state,
         contacts: state.contacts.map((c) =>
-          c._id === action.payload._id ? action.payload : c
+          c.id === action.payload.id ? action.payload : c
         ),
       };
-   case "delete_contact":
-    return {
+    case "delete_contact":
+      return {
         ...state,
         contacts: state.contacts.filter(contact => contact.id !== action.payload)
-    };
-case "edit_contact":
-	return {
-		...store,
-		contacts: store.contacts.map(c => c.id === action.payload.id ? action.payload : c)
-	};
+      };
+    case "edit_contact":
+      return {
+        ...store,
+        contacts: store.contacts.map(c => c.id === action.payload.id ? action.payload : c)
+      };
+    case "selectedContacts":
+      return {
+        ...store,
+        selectedContacts: action.paylaod // asi por que tiene ya la informacion
+      }
   }
 };
 

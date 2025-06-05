@@ -5,7 +5,7 @@ import { FormContact } from "../components/FormContact";
 
 export const EditContact = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); //agregar store para tener acceso al selectedcontact (mas adelante)
   const { dispatch } = useGlobalReducer();
 
   const [contact, setContact] = useState({
@@ -14,7 +14,7 @@ export const EditContact = () => {
     phone: "",
     address: "",
   });
-
+// UseState maneja variables, el UseEffect maneja funciones, solo se ejecutan cuando ocurre un evento, onclick etc...
   useEffect(() => {
     const loadContact = async (id) => {
       try {
@@ -27,20 +27,20 @@ export const EditContact = () => {
         console.error("Error loading contact:", error);
       }
     };
-    loadContact();
-  }, [id]);
+    loadContact(id);
+  }, []); // este array, debe de estar vacio, para que se ejecute una vez. 
 
   const handleSubmit = async (updatedContact) => {
     try {
       const response = await fetch(
-        `https://playground.4geeks.com/contact/agendas/Ricks/contacts/${updatedContact}`,
+        `https://playground.4geeks.com/contact/agendas/Ricks/contacts/${updatedContact.id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(updatedContact),
         }
       );
-      const data = await response.json();
+      const data = await response.json();//verificar si es _id o id
       dispatch({ type: "edit_contact", payload: data });
       navigate("/");
     } catch (error) {
