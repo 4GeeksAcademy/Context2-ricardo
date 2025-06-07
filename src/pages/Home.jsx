@@ -48,17 +48,19 @@ export const Home = () => {
           <Card
             key={contact.id}
             name={contact.name}
-            number={contact.phone}
+            address={contact.address}
+            email={contact.email}
+            phone={contact.phone}
             photo={contact.photo}
             onEdit={() => {
               navigate(`/edit-contact/${contact.id}`)
-              dispatch({ type: "selectedContacts", paylaod: contact})
+              dispatch({ type: "selectedContacts", paylaod: contact })
             }}
             onDelete={() => handleDelete(contact.id)}
           />
         ))
       }
-      
+
     </div>
   )
 
